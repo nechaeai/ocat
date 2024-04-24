@@ -6,7 +6,7 @@ This project is a minified system of a the ORAS system, a project used by probat
 
 Make sure you review the [Guidelines section](#guidelines) to learn about when and how you should seek help.
 
-Good luck!
+Good luck! 
 
 ## About Web Development
 
