@@ -2,47 +2,40 @@ const { AssessmentService } = require(`../microservices`);
 const { ResponseHandler } = require(`../utils`);
 
 const { Router } = require(`express`);
-
 const assessmentRouter = Router();
 
-assessmentRouter.post(
-  `/`,
-  async (req, res, next) => {
-    try {
-      const { assessment } = req.body;
+// Endpoint for submitting assessments
+assessmentRouter.post(`/`, async (req, res, next) => {
+  try {
+    const assessment = req.body;
 
-      // verify that your data is making it here to the API by using console.log(assessment);
-      // call the AssessmentService.submit function from packages/api/src/microservices/Assessment-Service.js and
-      // supply the correct parameters
+    // Uncomment the next line to debug if the data is coming through
+    // console.log(assessment);
 
-      ResponseHandler(
-        res,
-        `Submitted assessment`,
-        {},
-      );
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+    // Call the AssessmentService.submit function and pass the assessment data
+    const result = await AssessmentService.submit(assessment);
 
-assessmentRouter.get(
-  `/`,
-  async (req, res, next) => {
-    try {
-      // verify that your data is making it here to the API by using console.log();
-      // call the AssessmentService.getList function from packages/api/src/microservices/Assessment-Service.js
-      const assessments = [];
+    // Use ResponseHandler to respond to the request
+    ResponseHandler(res, `Submitted assessment`, result);
+  } catch (err) {
+    next(err);
+  }
+});
 
-      ResponseHandler(
-        res,
-        `Fetched assessments`,
-        { assessments },
-      );
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+// Endpoint for getting a list of assessments
+assessmentRouter.get(`/`, async (req, res, next) => {
+  try {
+    // Uncomment the next line to debug if the route is being hit
+    // console.log('Fetching assessments');
+
+    // Call the AssessmentService.getList function
+    const assessments = await AssessmentService.getList();
+
+    // Use ResponseHandler to respond to the request
+    ResponseHandler(res, `Fetched assessments`, { assessments });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = { assessmentRouter };

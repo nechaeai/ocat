@@ -33,12 +33,14 @@ InferCreationAttributes<Assessment>
         type: DataTypes.INTEGER,
       },
       instrumentType: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        type: DataTypes.STRING,
+        defaultValue: 0,
       },
       score: {
-        allowNull: false,
         type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
       riskLevel: {
         allowNull: false,
