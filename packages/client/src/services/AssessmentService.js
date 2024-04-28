@@ -1,28 +1,63 @@
-import Axios from '../utils/http.config';
+import axios from 'axios';
 
 export class AssessmentService {
   static submit(assessment) {
-    // Adjusted URL to match the Express route, which is expecting the POST request at `/api/assessment/`
-    return Axios.post(`/assessment`, assessment) // Removed the '/submit' to match your Express route
-      .then(response => response.data)
-      .catch(err => {
-        // Error handling if the submission fails
-        const statusText = err.response?.statusText || `Network Error`;
-        const errorMessage = err.response?.data?.message || err.message;
-        throw new Error(`${statusText} - ${errorMessage}`);
-      });
+    try {
+      const instrumentTypeMapping = {
+        'Another Instrument Type': 2,
+        'Cat Behavioral Instrument': 1,
+        // Add other possible instrument types here
+
+        'Yet Another Instrument Type': 3,
+        // etc.
+      };
+
+      // Map instrument_type to its corresponding integer value
+      console.log(`Assessment object before mapping:`, assessment);
+
+      assessment.instrumentType = instrumentTypeMapping[assessment.instrumentType];
+
+      console.log(`Assessment object after mapping:`, assessment);
+
+      return axios.post(`/api/assessment/submit`, { assessment })
+        .then(response => response.data);
+    }
+    catch (err) {
+      throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
+    }
+  }
+
+  static edit(assessmentId, updatedAssessment) {
+    try {
+      return axios.put(`/api/assessment/edit`, { assessmentId, updatedAssessment })
+        .then(response => response.data);
+    }
+    catch (err) {
+      throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
+    }
+  }
+
+  static delete(elementId) {
+    try {
+      return axios.post(`/api/assessment/delete`, { elementId })
+        .then(response => response.data);
+    }
+    catch (err) {
+      throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
+    }
   }
 
   static getList() {
-    // Adjusted URL to match your expected GET request path, assuming you have a route setup for it
-    return Axios.get(`/assessment/list`) // This needs to correspond to your GET route
-      .then(response => response.data.data.assessment)
-      .catch(err => {
-        // Error handling if the get list fails
-        const statusText = err.response?.statusText || `Network Error`;
-        const errorMessage = err.response?.data?.message || err.message;
-        throw new Error(`${statusText} - ${errorMessage}`);
-      });
+    try {
+      return axios.get(`/api/assessment/`, {
+        params: {
+          sort: `score`,
+        },
+      })
+        .then(response => response.data.data.assessments);
+    }
+    catch (err) {
+      throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
+    }
   }
 }
-

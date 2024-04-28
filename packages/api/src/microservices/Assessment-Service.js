@@ -1,23 +1,35 @@
 const { Assessment } = require(`../database/models`);
 
-exports.submit = async (assessmentData) => {
-  try {
-    // Create a new assessment in the database
-    const newAssessment = await Assessment.create(assessmentData);
-    return newAssessment; // This returns the newly created assessment
-  } catch (error) {
-    // Handle any errors that occur during the creation of the assessment
-    throw new Error(`Error creating new assessment: ${error.message}`);
-  }
+exports.submit = async (assessment) => {
+  // use the sequelize model Assessments from packages/api/src/database/models to save
+  // the assessment data in the PostgreSQL database
+  await Assessment.create({
+    catDateOfBirth: assessment.catDateOfBirth,
+    catName: assessment.catName,
+    instrumentType: assessment.instrumentType,
+    riskLevel: assessment.riskLevel,
+    score: assessment.score,
+  });
+};
+exports.edit = async (assessmentId, updatedAssessment) => {
+  await Assessment.update(updatedAssessment, {
+    where: {
+      id: assessmentId,
+    },
+  });
+};
+exports.delete = async (assessmentId) => {
+  await Assessment.destroy({
+    where: {
+      id: assessmentId,
+    },
+  });
 };
 
 exports.getList = async () => {
-  try {
-    // Fetch all assessments from the database
-    const assessments = await Assessment.findAll();
-    return assessments; // This returns an array of assessments
-  } catch (error) {
-    // Handle any errors that occur during the fetching of assessments
-    throw new Error(`Error fetching assessments: ${error.message}`);
-  }
+  // use the sequelize model Assessments from packages/api/src/database/models to fetch
+  // the assessment data from the PostgreSQL database
+  const assessments = await Assessment.findAll();
+
+  return assessments.map(element => element.dataValues);
 };

@@ -4,6 +4,7 @@ import { SiteWrapper } from './components';
 import { DashboardBulletin } from './pages/Dashboard/DashboardBulletin';
 import { NewAssessment } from './pages/Assessments/NewAssessment.jsx';
 import { AssessmentList } from './pages/Assessments/AssessmentList';
+import EditAssessment from './pages/Assessments/Components/EditAssessment'; // Import your EditAssessment component
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
@@ -15,7 +16,14 @@ const router = createBrowserRouter([
     element: <NewAssessment />,
     path: `/assessment/new`,
   },
-
+  {
+    element: <AssessmentList />,
+    path: `/assessment/list`,
+  },
+  {
+    element: <EditAssessment />,
+    path: `/edit/:id`, // New route for editing an assessment
+  },
 ]);
 
 const App = () => <SiteWrapper>

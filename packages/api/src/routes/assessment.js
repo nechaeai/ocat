@@ -2,40 +2,67 @@ const { AssessmentService } = require(`../microservices`);
 const { ResponseHandler } = require(`../utils`);
 
 const { Router } = require(`express`);
+
 const assessmentRouter = Router();
 
-// Endpoint for submitting assessments
-assessmentRouter.post(`/`, async (req, res, next) => {
-  try {
-    const assessment = req.body;
+assessmentRouter.post(
+  `/submit`,
+  async (req, res, next) => {
+    try {
+      const { assessment } = req.body;
 
-    // Uncomment the next line to debug if the data is coming through
-    // console.log(assessment);
+      // verify that your data is making it here to the API by using console.log(assessment);
+      // call the AssessmentService.submit function from packages/api/src/microservices/Assessment-Service.js and
+      // supply the correct parameters
+      await AssessmentService.submit(assessment);
 
-    // Call the AssessmentService.submit function and pass the assessment data
-    const result = await AssessmentService.submit(assessment);
+      ResponseHandler(
+        res,
+        `Submitted assessment`,
+        {},
+      );
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
-    // Use ResponseHandler to respond to the request
-    ResponseHandler(res, `Submitted assessment`, result);
-  } catch (err) {
-    next(err);
-  }
-});
+assessmentRouter.post(
+  `/delete`,
+  async (req, res, next) => {
+    try {
+      const { elementId } = req.body;
 
-// Endpoint for getting a list of assessments
-assessmentRouter.get(`/`, async (req, res, next) => {
-  try {
-    // Uncomment the next line to debug if the route is being hit
-    // console.log('Fetching assessments');
+      await AssessmentService.delete(elementId);
 
-    // Call the AssessmentService.getList function
-    const assessments = await AssessmentService.getList();
+      ResponseHandler(
+        res,
+        `Deleted assessment`,
+        {},
+      );
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-    // Use ResponseHandler to respond to the request
-    ResponseHandler(res, `Fetched assessments`, { assessments });
-  } catch (err) {
-    next(err);
-  }
-});
+assessmentRouter.get(
+  `/`,
+  async (req, res, next) => {
+    try {
+      // verify that your data is making it here to the API by using console.log();
+      // call the AssessmentService.getList function from packages/api/src/microservices/Assessment-Service.js
+      const assessments = await AssessmentService.getList();
+
+      ResponseHandler(
+        res,
+        `Fetched assessments`,
+        { assessments },
+      );
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 module.exports = { assessmentRouter };
