@@ -45,6 +45,33 @@ assessmentRouter.post(
     }
   },
 );
+assessmentRouter.put(`/assessments/:id`, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { assessment } = req.body;
+    const updated = await AssessmentService.updateById(id, assessment);
+    if (!updated) {
+      return res.status(404).send({ message: `Assessment not found` });
+    }
+    ResponseHandler(res, `Updated assessment`, { updated });
+  } catch (err) {
+    next(err);
+  }
+});
+assessmentRouter.get(`/assessments/:id`, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const assessment = await AssessmentService.getById(id); // Ensure this method exists and works correctly
+    if (!assessment) {
+      return res.status(404).send(`Assessment not found`);
+    }
+    res.json(assessment);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Server error:`, error);
+    res.status(500).send(`Internal server error`);
+  }
+});
 
 assessmentRouter.get(
   `/`,
