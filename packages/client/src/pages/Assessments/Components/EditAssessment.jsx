@@ -49,7 +49,6 @@ const EditAssessment = () => {
     });
 
     if (response.ok) {
-      // Redirect to the assessment list or wherever you want to go after the update
       navigate.push(`/assessments`);
     }
   };
