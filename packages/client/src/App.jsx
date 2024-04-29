@@ -24,6 +24,10 @@ const router = createBrowserRouter([
     element: <EditAssessment />,
     path: `/edit/:id`, // New route for editing an assessment
   },
+  {
+    element: <AssessmentList />, // Replace with your component
+    path: `/assessments`,
+  },
 ]);
 
 const App = () => <SiteWrapper>

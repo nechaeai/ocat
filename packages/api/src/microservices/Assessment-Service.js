@@ -18,6 +18,19 @@ exports.edit = async (assessmentId, updatedAssessment) => {
     },
   });
 };
+exports.getById = async (assessmentId) => {
+  const assessment = await Assessment.findOne({
+    where: {
+      id: assessmentId,
+    },
+  });
+
+  if (!assessment) {
+    throw new Error(`Assessment with id ${assessmentId} not found`);
+  }
+
+  return assessment;
+};
 exports.delete = async (assessmentId) => {
   await Assessment.destroy({
     where: {

@@ -45,20 +45,20 @@ assessmentRouter.post(
     }
   },
 );
-assessmentRouter.put(`/assessments/:id`, async (req, res, next) => {
+assessmentRouter.put(`/:id`, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { assessment } = req.body;
-    const updated = await AssessmentService.updateById(id, assessment);
-    if (!updated) {
-      return res.status(404).send({ message: `Assessment not found` });
-    }
+    const updated = await AssessmentService.edit(id, assessment);
+    // if (!updated) {
+    //   return res.status(404).send({ message: `Assessment not found` });
+    // }
     ResponseHandler(res, `Updated assessment`, { updated });
   } catch (err) {
     next(err);
   }
 });
-assessmentRouter.get(`/assessments/:id`, async (req, res) => {
+assessmentRouter.get(`/:id`, async (req, res) => {
   try {
     const { id } = req.params;
     const assessment = await AssessmentService.getById(id); // Ensure this method exists and works correctly

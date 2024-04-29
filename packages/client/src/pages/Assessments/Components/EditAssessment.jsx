@@ -17,7 +17,7 @@ const EditAssessment = () => {
   useEffect(() => {
     const fetchAssessment = async () => {
       try {
-        const response = await fetch(`/api/assessments/${id}`);
+        const response = await fetch(`/api/assessment/${id}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch, status: ${response.status}`);
         }
@@ -38,8 +38,8 @@ const EditAssessment = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch(`/api/assessments/${id}`, {
-      body: JSON.stringify(assessment),
+    const response = await fetch(`/api/assessment/${id}`, {
+      body: JSON.stringify({ assessment }),
 
       headers: {
         'Content-Type': `application/json`,
@@ -49,7 +49,7 @@ const EditAssessment = () => {
     });
 
     if (response.ok) {
-      navigate.push(`/assessments`);
+      navigate(`/assessments`);
     }
   };
 
